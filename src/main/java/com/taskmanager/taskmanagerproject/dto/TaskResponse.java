@@ -1,8 +1,10 @@
-package com.taskmanager.taskmanagerproject.model;
+package com.taskmanager.taskmanagerproject.dto;
 
 import lombok.Data;
 import java.time.LocalDate;
 
+
+// check if necessary
 @Data
 public class TaskResponse {
     private Long id;

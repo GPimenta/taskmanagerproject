@@ -1,6 +1,7 @@
 package com.taskmanager.taskmanagerproject.service;
 
 import com.taskmanager.taskmanagerproject.model.Task;
+import com.taskmanager.taskmanagerproject.dto.TaskCreateRequest;
 import com.taskmanager.taskmanagerproject.model.TaskListDetails;
 import com.taskmanager.taskmanagerproject.repository.TaskRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,8 +10,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -44,8 +43,9 @@ public class TaskService implements ITaskService {
     }
 
     @Override
-    public Task createTask(String title, String description, LocalDate dueDate) {
-        return null;
+    public Task createTask(TaskCreateRequest request) {
+        Task task = new Task(request.getTitle(), request.getDescription(), request.getDueDate());
+        return taskRepository.saveAndFlush(task);
     }
 
     @Override

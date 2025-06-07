@@ -1,4 +1,4 @@
-package com.taskmanager.taskmanagerproject.model;
+package com.taskmanager.taskmanagerproject.dto;
 
 import lombok.Data;
 

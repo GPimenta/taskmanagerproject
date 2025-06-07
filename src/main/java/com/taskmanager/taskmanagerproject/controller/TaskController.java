@@ -1,10 +1,9 @@
 package com.taskmanager.taskmanagerproject.controller;
 
 import com.taskmanager.taskmanagerproject.model.Task;
+import com.taskmanager.taskmanagerproject.dto.TaskCreateRequest;
 import com.taskmanager.taskmanagerproject.model.TaskListDetails;
-import com.taskmanager.taskmanagerproject.repository.TaskRepository;
 import com.taskmanager.taskmanagerproject.service.ITaskService;
-import com.taskmanager.taskmanagerproject.service.TaskService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,12 +11,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.UriComponentsBuilder;
 
-import java.util.List;
+import java.net.URI;
 import java.util.Optional;
 
 @RestController
@@ -37,7 +34,7 @@ public class TaskController implements ITaskController {
             @PageableDefault(
                     page = 0,
                     size = 10,
-                    sort = "createAt",
+                    sort = "createdAt",
                     direction = Sort.Direction.ASC)
             Pageable pageable) {
         TaskListDetails allTasks = taskService.getAllTasks(pageable);
@@ -62,8 +59,19 @@ public class TaskController implements ITaskController {
     }
 
     @Override
-    public ResponseEntity<?> createTask(Task task) {
-        return null;
-    }
+    @PostMapping
+    public ResponseEntity<?> createTask(@RequestBody TaskCreateRequest request, UriComponentsBuilder ucb) {
+        Task task = taskService.createTask(request);
 
+        Optional<Task> validateTask = taskService.getTask(task.getId());
+
+        if (validateTask.isEmpty()) {
+            return ResponseEntity.internalServerError().build();
+        } else {
+            URI uri = ucb.path("v1/tasks/{id}")
+                    .buildAndExpand(validateTask.get().getId())
+                    .toUri();
+            return ResponseEntity.created(uri).build();
+        }
+    }
 }
