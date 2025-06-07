@@ -1,9 +1,12 @@
 package com.taskmanager.taskmanagerproject.controller;
 
+import com.taskmanager.taskmanagerproject.dto.TaskResponse;
+import com.taskmanager.taskmanagerproject.dto.TaskUpdateRequest;
 import com.taskmanager.taskmanagerproject.model.Task;
 import com.taskmanager.taskmanagerproject.dto.TaskCreateRequest;
 import com.taskmanager.taskmanagerproject.model.TaskListDetails;
 import com.taskmanager.taskmanagerproject.service.ITaskService;
+import jakarta.persistence.EntityNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -72,6 +75,27 @@ public class TaskController implements ITaskController {
                     .buildAndExpand(validateTask.get().getId())
                     .toUri();
             return ResponseEntity.created(uri).build();
+        }
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateTask(@RequestBody TaskUpdateRequest taskUpdateRequest, @PathVariable Long id) {
+        try {
+            Task task = taskService.updateTask(taskUpdateRequest, id);
+            TaskResponse response = new TaskResponse();
+
+            response.setId(task.getId());
+            response.setTitle(task.getTitle());
+            response.setDescription(task.getDescription());
+            response.setDueDate(task.getDueDate());
+
+            return ResponseEntity.ok(response);
+
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        } catch (Exception e) {
+            logger.error("Failed to update task {1} - {2}, id, e");
+            return ResponseEntity.internalServerError().build();
         }
     }
 }

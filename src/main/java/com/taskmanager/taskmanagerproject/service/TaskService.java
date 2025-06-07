@@ -1,9 +1,11 @@
 package com.taskmanager.taskmanagerproject.service;
 
+import com.taskmanager.taskmanagerproject.dto.TaskUpdateRequest;
 import com.taskmanager.taskmanagerproject.model.Task;
 import com.taskmanager.taskmanagerproject.dto.TaskCreateRequest;
 import com.taskmanager.taskmanagerproject.model.TaskListDetails;
 import com.taskmanager.taskmanagerproject.repository.TaskRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -49,8 +51,17 @@ public class TaskService implements ITaskService {
     }
 
     @Override
-    public Task updateTask(Task updatedTask) {
-        return null;
+    public Task updateTask(TaskUpdateRequest updatedTask, Long id) {
+        Optional<Task> optionalTask = taskRepository.findById(id);
+
+        return optionalTask.map(task -> {
+                    task.setTitle(updatedTask.getTitle());
+                    task.setDescription(updatedTask.getDescription());
+                    task.setDueDate(updatedTask.getDueDate());
+                    task.setCompleted(updatedTask.isCompleted());
+                    return taskRepository.saveAndFlush(task);
+
+                }).orElseThrow(() -> new EntityNotFoundException("Task not found with id " + id));
     }
 
     @Override

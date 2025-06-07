@@ -1,5 +1,6 @@
 package com.taskmanager.taskmanagerproject.service;
 
+import com.taskmanager.taskmanagerproject.dto.TaskUpdateRequest;
 import com.taskmanager.taskmanagerproject.model.Task;
 import com.taskmanager.taskmanagerproject.dto.TaskCreateRequest;
 import com.taskmanager.taskmanagerproject.model.TaskListDetails;
@@ -13,6 +14,6 @@ public interface ITaskService {
     Optional<Task> getTask(Long id);
 //    Task createTask(String title, String description, LocalDate dueDate);
     Task createTask(TaskCreateRequest request);
-    Task updateTask(Task updatedTask);
+    Task updateTask(TaskUpdateRequest updatedTask, Long id);
     boolean deleteTask(Long id);
 }
