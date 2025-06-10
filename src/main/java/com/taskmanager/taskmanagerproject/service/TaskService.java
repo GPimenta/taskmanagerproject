@@ -66,6 +66,10 @@ public class TaskService implements ITaskService {
 
     @Override
     public boolean deleteTask(Long id) {
-        return false;
+        return taskRepository.findById(id).map(task -> {
+            taskRepository.delete(task);
+            return true;
+        }).orElse(false);
+
     }
 }

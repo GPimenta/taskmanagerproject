@@ -6,6 +6,8 @@ import com.taskmanager.taskmanagerproject.model.Task;
 import com.taskmanager.taskmanagerproject.dto.TaskCreateRequest;
 import com.taskmanager.taskmanagerproject.model.TaskListDetails;
 import com.taskmanager.taskmanagerproject.service.ITaskService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.persistence.EntityNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,6 +22,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import java.net.URI;
 import java.util.Optional;
 
+@Tag(name = "Tasks", description = "Task management endpoints")
 @RestController
 @RequestMapping("v1/tasks")
 public class TaskController implements ITaskController {
@@ -31,7 +34,7 @@ public class TaskController implements ITaskController {
     public TaskController(ITaskService taskService) {
         this.taskService = taskService;
     }
-
+    @Operation(summary = "Get all tasks", description = "Returns a all task if tehy exists.")
     @GetMapping()
     public ResponseEntity<?> findAll(
             @PageableDefault(
@@ -45,6 +48,7 @@ public class TaskController implements ITaskController {
         return ResponseEntity.ok(allTasks);
     }
 
+    @Operation(summary = "Get a task by ID", description = "Returns a single task if it exists.")
     @GetMapping("/{id}")
     public ResponseEntity<?> getTask(@PathVariable Long id) {
         Optional<Task> optionalTask = taskService.getTask(id);
@@ -61,6 +65,7 @@ public class TaskController implements ITaskController {
         }
     }
 
+    @Operation(summary = "Add a task", description = "Adds a single task.")
     @Override
     @PostMapping
     public ResponseEntity<?> createTask(@RequestBody TaskCreateRequest request, UriComponentsBuilder ucb) {
@@ -78,6 +83,7 @@ public class TaskController implements ITaskController {
         }
     }
 
+    @Operation(summary = "Updates a task by ID", description = "Updates a single task if it exists.")
     @PutMapping("/{id}")
     public ResponseEntity<?> updateTask(@RequestBody TaskUpdateRequest taskUpdateRequest, @PathVariable Long id) {
         try {
@@ -97,5 +103,14 @@ public class TaskController implements ITaskController {
             logger.error("Failed to update task {1} - {2}, id, e");
             return ResponseEntity.internalServerError().build();
         }
+    }
+
+    @Operation(summary = "Deletes a task by ID", description = "Deletes task if it exists.")
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteTask(@PathVariable Long id) {
+        if (taskService.deleteTask(id)) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.notFound().build();
     }
 }
