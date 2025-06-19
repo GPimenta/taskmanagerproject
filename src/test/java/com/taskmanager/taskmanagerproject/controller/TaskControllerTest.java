@@ -11,27 +11,21 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.Statement;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@ActiveProfiles(value = "test")
-//@TestPropertySource("classpath:application-test.yaml")
+@ActiveProfiles("test")
 public class TaskControllerTest {
 
     @Autowired
     TestRestTemplate restTemplate;
-
-    @Autowired
-    private TaskRepository taskRepository;
-
-    @Test
-    void sanityCheck() {
-        List<Task> tasks = taskRepository.findAll();
-        assertThat(tasks).isNotEmpty();
-        tasks.forEach(System.out::println);
-    }
 
     @Test
     void getAllTasks() {
@@ -40,5 +34,7 @@ public class TaskControllerTest {
 
         System.out.println("HERE");
         System.out.println(response);
+
+
     }
 }

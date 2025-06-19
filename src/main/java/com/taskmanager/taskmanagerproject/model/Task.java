@@ -23,6 +23,9 @@ public class Task {
     private LocalDate createdAt;
     private boolean completed = false;
 
+    public Task() {
+    }
+
     public Task(String title, String description, LocalDate dueDate) {
         this.title = title;
         this.description = description;

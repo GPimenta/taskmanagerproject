@@ -1,2 +1,0 @@
-INSERT INTO task (title, description, due_date, create_at, completed) VALUES('dummy_title_1','dummy_description_1', '2025-06-10', '2025-06-01', FALSE);
-INSERT INTO task (title, description, due_date, create_at, completed) VALUES('dummy_title_2','dummy_description_2', '2025-06-19', '2025-06-02', FALSE);
