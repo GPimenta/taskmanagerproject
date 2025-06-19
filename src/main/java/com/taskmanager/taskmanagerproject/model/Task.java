@@ -1,10 +1,7 @@
 package com.taskmanager.taskmanagerproject.model;
 
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Data;
 
 import java.time.Clock;
@@ -13,13 +10,16 @@ import java.util.Objects;
 
 @Entity
 //@Data
+@Table(name = "task")
 public class Task {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String title;
     private String description;
+    @Column(name = "due_date")
     private LocalDate dueDate;
+    @Column(name = "create_at")
     private LocalDate createdAt;
     private boolean completed = false;
 
