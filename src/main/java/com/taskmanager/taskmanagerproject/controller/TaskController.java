@@ -34,7 +34,7 @@ public class TaskController implements ITaskController {
     public TaskController(ITaskService taskService) {
         this.taskService = taskService;
     }
-    @Operation(summary = "Get all tasks", description = "Returns a all task if tehy exists.")
+    @Operation(summary = "Get all tasks", description = "Returns a all task if they exists.")
     @GetMapping()
     public ResponseEntity<?> findAll(
             @PageableDefault(
