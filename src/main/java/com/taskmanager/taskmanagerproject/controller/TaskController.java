@@ -76,7 +76,7 @@ public class TaskController implements ITaskController {
         if (validateTask.isEmpty()) {
             return ResponseEntity.internalServerError().build();
         } else {
-            URI uri = ucb.path("v1/tasks/{id}")
+            URI uri = ucb.path("/v1/tasks/{id}")
                     .buildAndExpand(validateTask.get().getId())
                     .toUri();
             return ResponseEntity.created(uri).build();

@@ -70,6 +70,5 @@ public class TaskService implements ITaskService {
             taskRepository.delete(task);
             return true;
         }).orElse(false);
-
     }
 }
